@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./css/index.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" placeholder="百度一下" id="pt">
+    <ul id="list"></ul>
+</body>
+<script>
+    var btn = document.getElementById('pt');
+    var list = document.getElementById('list')
+    btn.oninput = function() {
+        var val = this.value;
+        list.innerHTML = ''
+
+        console.log(val)
+        var xml = new XMLHttpRequest();
+        xml.onload = function(res) {
+            if (res.target.status == 200) {
+                var str = ''
+                var json = JSON.parse(res.target.response);
+                if (json.code == 0) {
+                    json.data.forEach(function(item) {
+                        console.log(item)
+                        str += '<li>' + item + '</li>'
+
+                    })
+                    list.innerHTML = str
+
+                }
+            }
+        }
+        xml.open('get', '/api/inputjson?key=' + val, true);
+        xml.send();
+    }
+</script>
+
+</html>
